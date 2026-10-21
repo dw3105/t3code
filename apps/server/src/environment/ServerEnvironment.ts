@@ -207,7 +207,8 @@ export const make = Effect.gen(function* () {
           ...(serverConfig.startupPresentation === "headless"
             ? { subcommand: "serve" as const }
             : {}),
-          ...(systemdUnit === null ? {} : { systemdUnit }),
+          // A service installed to replace the unit must keep the unit's data directory.
+          ...(systemdUnit === null ? {} : { systemdUnit, baseDir: serverConfig.baseDir }),
         };
   // Static is correct: the control fd is known at bootstrap, and the desktop
   // app and its bundled server ship in one artifact, so a present fd means the
